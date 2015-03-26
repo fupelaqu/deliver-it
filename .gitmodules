@@ -1,0 +1,4 @@
+[submodule "roles/docker-registry"]
+	path = roles/docker-registry
+	url = https://github.com/fupelaqu/ansible-docker-registry
+	branch = master
