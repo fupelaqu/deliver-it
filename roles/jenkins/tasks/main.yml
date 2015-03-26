@@ -1,0 +1,52 @@
+---
+
+  - name: search jenkins image
+    shell: docker inspect busybox-jenkins-{{jenkins_version}}:latest
+    ignore_errors: yes
+    register: search_jenkins_response
+
+  - name: inspect jenkins container
+    shell: docker inspect jenkins
+    register: inspect_jenkins_response
+    ignore_errors: yes
+    #when: search_jenkins_response|changed
+
+  - set_fact: jenkins_running="{{(inspect_jenkins_response.stdout|from_json)[0].State.Running}}" jenkins_image="{{(inspect_jenkins_response.stdout|from_json)[0].Config.Image}}"
+    when: "(inspect_jenkins_response.stdout|from_json)|length > 0"
+
+  - include: jenkins-build-container.yml
+#    when: search_jenkins_response|failed
+
+  - name: stop jenkins container
+    shell: docker kill jenkins
+    ignore_errors: yes
+    register: stop_jenkins_container
+    when: "jenkins_running is defined and jenkins_running and ((build_jenkins is defined and build_jenkins|changed) or not(jenkins_image == 'busybox-jenkins-{{jenkins_version}}:latest'))"
+
+  - name: remove jenkins container
+    shell: docker rm jenkins
+    ignore_errors: yes
+    register: remove_jenkins_container
+    when: "jenkins_image is defined and not(jenkins_image == 'busybox-jenkins-{{jenkins_version}}:latest')"
+
+  - name: start jenkins container
+    docker:
+      image=busybox-jenkins-{{jenkins_version}}:latest
+      memory_limit=2048MB
+      name=jenkins
+      ports=8080
+      state=running
+      volumes=/var/log/jenkins:/tomcat/logs:rw,/etc/timezone:/etc/timezone:ro,/var/lib/jenkins:/jenkins:rw
+    register: start_jenkins
+    when: "jenkins_running is not defined or not jenkins_running or stop_jenkins_container|changed"
+
+  - name: inspect jenkins container
+    shell: docker inspect jenkins
+    register: inspect_jenkins_response
+#    when: start_jenkins|changed
+
+  - set_fact: jenkins_http_port="{{(inspect_jenkins_response.stdout|from_json)[0].NetworkSettings.Ports['8080/tcp'][0].HostPort}}"
+    when: inspect_jenkins_response|changed
+
+  - debug: msg="jenkins_http_port:{{jenkins_http_port}}"
+    when: jenkins_http_port is defined

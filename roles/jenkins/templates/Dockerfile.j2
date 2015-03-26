@@ -1,0 +1,42 @@
+#
+# jenkins Dockerfile
+#
+#
+
+# Pull base image.
+FROM jeanblanchard/busybox-java:{{java_version}}
+
+ENV TOMCAT_MAJOR_VERSION 7
+ENV TOMCAT_MINOR_VERSION 7.0.56
+ENV CATALINA_HOME /tomcat
+ENV JVM_OPT -Xms2048m -Xmx2048m -XX:MaxPermSize=384m
+ENV JENKINS_VERSION {{jenkins_version}}
+
+# INSTALL TOMCAT
+RUN wget -q http://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz && \
+    wget -qO- http://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 | md5sum -c - && \
+    gunzip apache-tomcat-*.tar.gz && \
+    tar xf apache-tomcat-*.tar && \
+    rm apache-tomcat-*.tar && \
+    mv apache-tomcat* /tomcat
+
+ADD run.sh /run.sh
+RUN chmod +x /*.sh
+
+ADD tomcat/bin/*.sh /tomcat/bin/
+RUN chmod +x /tomcat/bin/*.sh
+
+# INSTALL JENKINS
+RUN wget -q http://mirrors.jenkins-ci.org/war/${JENKINS_VERSION}/jenkins.war && \
+  mkdir /tomcat/webapps/jenkins && \
+  unzip jenkins.war -d /tomcat/webapps/jenkins && \
+  rm -f jenkins.war
+
+# Define mountable directories.
+VOLUME ["/tomcat/logs", "/jenkins"]
+
+# Expose ports.
+EXPOSE 8080
+
+# Define default command.
+CMD /run.sh
