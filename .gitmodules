@@ -2,3 +2,7 @@
 	path = roles/docker-registry
 	url = https://github.com/fupelaqu/ansible-docker-registry
 	branch = master
+[submodule "roles/docker"]
+	path = roles/docker
+	url = https://github.com/fupelaqu/docker.ubuntu
+	branch = master
