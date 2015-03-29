@@ -53,14 +53,14 @@
 
   - name: start jenkins ambassador container
     docker:
-      image=cpuguy83/docker-grand-ambassador
-      name=jenkins_ambassador
-      command="/usr/bin/grand-ambassador -name jenkins"
-      net="bridge"
-      expose="8080"
-      ports="{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:8080:8080"
-      volumes=/var/run/docker.sock:/var/run/docker.sock:ro
-      state=running
+      image: cpuguy83/docker-grand-ambassador
+      name: jenkins_ambassador
+      command: "-name jenkins"
+      net: "bridge"
+      expose: "8080"
+      ports: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:8080:8080"
+      volumes: /var/run/docker.sock:/var/run/docker.sock:ro
+      state: running
     register: start_jenkins_ambassador
 
   - name: add jenkins upstart conf
