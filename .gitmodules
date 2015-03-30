@@ -6,3 +6,7 @@
 	path = roles/docker
 	url = https://github.com/fupelaqu/docker.ubuntu
 	branch = master
+[submodule "roles/db"]
+	path = roles/db
+	url = https://github.com/fupelaqu/ansible-docker-db
+	branch = master
