@@ -1,0 +1,12 @@
+---
+
+# Versions for the python packages that are installed
+pip_version_pip: latest
+pip_version_setuptools: latest
+pip_version_six: "{{__pip_version_six}}"
+pip_version_docker_py: "{{__pip_version_docker_py}}"
+pip_extra_args: "{{__pip_extra_args}}"
+
+proxy: no
+proxy_url: "{{__proxy_url}}"
+proxy_env: "{{__proxy_env}}"

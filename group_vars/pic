@@ -52,4 +52,6 @@ __proxy_env:
   https_proxy: "{{__proxy_url}}"
   no_proxy: "{{__no_proxy}}"
 
+__pip_version_six: "1.4"
+__pip_version_docker_py: "1.1.0"
 __pip_extra_args: "--proxy {{__proxy_url}}"

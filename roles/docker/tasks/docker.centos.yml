@@ -1,0 +1,61 @@
+---
+
+
+  - include: docker.redhat.yml
+    register: centos_version_prequisite_unsatisfied
+    when: ansible_distribution_version|version_compare(6.5, '<')
+
+  - name: Download the Docker rpm for centos 6.5 or above
+    shell: wget -O /tmp/docker-engine-1.7.1-1.x86_64.rpm https://get.docker.com/rpm/1.7.1/centos-6/RPMS/x86_64/docker-engine-1.7.1-1.el6.x86_64.rpm
+    register: docker_centos6
+    when: (centos_version_prequisite_unsatisfied is not defined) and (ansible_distribution_version|version_compare(7, '<'))
+
+  - name: Download the Docker rpm for centos 7 or above
+    shell: wget -O /tmp/docker-engine-1.7.1-1.x86_64.rpm https://get.docker.com/rpm/1.7.1/centos-7/RPMS/x86_64/docker-engine-1.7.1-1.el7.centos.x86_64.rpm
+    register: docker_centos7
+    when: (centos_version_prequisite_unsatisfied is not defined) and (ansible_distribution_version|version_compare(7, '>'))
+
+  - name: Install Docker package
+    yum: name=/tmp/docker-engine-1.7.1-1.x86_64.rpm disable_gpg_check=yes update_cache=yes state=present
+    when: (centos_version_prequisite_unsatisfied is not defined) and (docker_centos6|changed or docker_centos7|changed)
+
+  - name: Install easy_install package
+    yum: name={{item}} state=latest
+    with_items:
+      - python-setuptools
+    when: centos_version_prerequisite_unsatisfied is not defined
+
+  # We must install pip before we can use the pip module below
+  - easy_install: name=pip #state=latest required ansible 2.x
+    when: centos_version_prerequisite_unsatisfied is not defined
+
+  # Install latest version when no specific release is set.
+  - name: Upgrade latest pip, setuptools with pip
+    pip:
+      name: "{{ item.name }}"
+      state: latest
+      extra_args: "{{pip_extra_args}}"
+    with_items:
+      - { name: pip, version: "{{ pip_version_pip }}" }
+      - { name: setuptools, version: "{{ pip_version_setuptools }}" }
+      - { name: six, version: "{{ pip_version_six }}" }
+      - { name: docker-py, version: "{{ pip_version_docker_py }}" }
+    when: (centos_version_prerequisite_unsatisfied is not defined) and item.version=="latest"
+
+  # Install specific version when set in the variables
+  - name: Install specific pip, setuptools, and docker-py with pip
+    pip:
+      name: "{{ item.name }}"
+      state: present
+      version: "{{ item.version }}"
+      extra_args: "{{pip_extra_args}}"
+    with_items:
+      - { name: pip, version: "{{ pip_version_pip }}" }
+      - { name: setuptools, version: "{{ pip_version_setuptools }}" }
+      - { name: six, version: "{{ pip_version_six }}" }
+      - { name: docker-py, version: "{{ pip_version_docker_py }}" }
+    when: (centos_version_prerequisite_unsatisfied is not defined) and item.version!="latest"
+
+  - name: Start the Docker daemon
+    service: name=docker state=started
+    when: (centos_version_prequisite_unsatisfied is not defined) and (docker_centos6|changed or docker_centos7|changed)
