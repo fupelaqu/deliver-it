@@ -1,8 +1,8 @@
-[submodule "roles/db"]
-	path = roles/db
-	url = https://github.com/fupelaqu/ansible-docker-db
-	branch = master
 [submodule "roles/docker.registry"]
 	path = roles/docker.registry
 	url = https://github.com/fupelaqu/ansible-docker-registry.git
+	branch = master
+[submodule "roles/docker.db"]
+	path = roles/docker.db
+	url = https://github.com/fupelaqu/ansible-docker-db
 	branch = master
