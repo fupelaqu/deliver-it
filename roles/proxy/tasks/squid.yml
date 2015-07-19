@@ -1,0 +1,47 @@
+---
+
+  - apt:
+      name: "{{item}}"
+      state: latest
+      update_cache: yes
+      cache_valid_time: 3600
+    with_items:
+      - squid
+      - apache2-utils
+      - python-passlib
+    when: ansible_os_family == "Debian"
+
+  - yum:
+      name: "{{item}}"
+      state: latest
+    with_items:
+      - squid
+      - httpd-tools
+      - python-passlib
+    when: ansible_os_family == "RedHat"
+
+  - name: start squid at boot
+    shell: systemctl enable squid
+    when: ansible_os_family == "RedHat"
+
+  - name: start squid
+    shell: systemctl start squid
+    when: ansible_os_family == "RedHat"
+
+  - file: path=/etc/squid3 state=directory
+
+  - file: path=/etc/squid3/users mode=644 state=touch
+
+  - name: add {{proxy_login}} to authorized users
+    htpasswd:
+      create: yes
+      path: /etc/squid3/users
+      name: "{{proxy_login}}"
+      password: "{{proxy_password}}"
+      state: present
+
+  - copy: src=squid.conf dest=/etc/squid3/ mode=644
+    register: squid_conf
+
+  - service: name=squid3 state=restarted
+    when: squid_conf|changed

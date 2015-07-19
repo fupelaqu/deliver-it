@@ -1,0 +1,16 @@
+---
+
+  - name: add squid
+    include: squid.yml
+    when: proxy_mock and "master" in group_names
+
+  - name: add proxy Settings for apt-get
+    include: apt.yml
+    when: ansible_os_family == "Debian"
+
+  - name: add proxy Settings for yum
+    include: yum.yml
+    when: ansible_os_family == "RedHat"
+
+  - name: add proxy Settings for wget
+    include: wget.yml

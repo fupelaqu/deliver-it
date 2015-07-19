@@ -1,0 +1,11 @@
+---
+
+proxy: yes
+
+proxy_mock: no
+
+proxy_server: "{{__proxy_server}}"
+proxy_login: "{{__proxy_login}}"
+proxy_password: "{{__proxy_password}}"
+proxy_url: "{{__proxy_url}}"
+no_proxy: "{{__no_proxy}}"
