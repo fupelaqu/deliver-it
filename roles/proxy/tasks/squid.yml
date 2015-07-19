@@ -28,6 +28,8 @@
     shell: systemctl start squid
     when: ansible_os_family == "RedHat"
 
+  - file: path=/var/spool/squid3 state=directory owner=proxy group=proxy
+
   - file: path=/etc/squid3 state=directory
 
   - file: path=/etc/squid3/users mode=644 state=touch
