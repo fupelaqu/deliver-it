@@ -1,0 +1,39 @@
+---
+
+  - name: add group artifactory
+    group: name=artifactory gid=498 state=present
+
+  - file: path={{home}} state=directory
+
+  - name: add user artifactory
+    user: name=artifactory group=artifactory home={{home}} shell=/bin/bash uid=500 state=present
+
+  - file: path={{data}} owner=artifactory group=artifactory state=directory
+  - file: path={{logs}} owner=artifactory group=artifactory state=directory
+  - file: path={{logs}}/catalina owner=artifactory group=artifactory state=directory
+  - file: path={{backup}} owner=artifactory group=artifactory state=directory
+#  - file: path={{etc}} owner=artifactory state=directory
+
+  - name: ensure artifactory container is running
+    docker:
+      image: "jfrog-docker-registry.bintray.io/artifactory/artifactory-oss:latest"
+      insecure_registry: "yes"
+      memory_limit: 1024MB
+      name: "artifactory"
+      expose: "8081"
+      ports:
+        - "{{interface}}:{{artifactory_port}}:8081"
+      env:
+        ARTIFACTORY_HOME: "{{home}}"
+        RUNTIME_OPTS: "-Xms512m -Xmx1024m"
+      volumes:
+        - "{{data}}:/var/opt/jfrog/artifactory/data:rw"
+        - "{{logs}}:/var/opt/jfrog/artifactory/logs:rw"
+        - "{{backup}}:/var/opt/jfrog/artifactory/backup:rw"
+#        - "{{etc}}:/var/opt/jfrog/artifactory/etc:rw"
+      privileged: "yes"
+      state: reloaded
+      pull: "missing"
+      restart_policy: always
+    register: start_artifactory
+

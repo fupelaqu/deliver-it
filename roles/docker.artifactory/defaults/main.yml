@@ -1,0 +1,9 @@
+---
+
+home: /var/opt/jfrog/artifactory
+data: "{{home}}/data"
+logs: /var/log/artifactory
+backup: "{{home}}/backup"
+etc: "{{home}}/etc"
+interface: "{{__interface}}"
+artifactory_port: "{{__artifactory_port}}"
