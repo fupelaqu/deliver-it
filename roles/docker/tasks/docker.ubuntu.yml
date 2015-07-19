@@ -80,10 +80,10 @@
     when: ufw_default_exists.stat.exists
 
   - lineinfile: "dest=/etc/default/docker line='export http_proxy=\"{{__proxy_url}}\"' state=present"
-    when: proxy
+    when: proxy == "yes"
 
   - lineinfile: "dest=/etc/default/docker line='export https_proxy=\"{{__proxy_url}}\"' state=present"
-    when: proxy
+    when: proxy == "yes"
 
   - name: Start Docker
     service: name=docker state=started
