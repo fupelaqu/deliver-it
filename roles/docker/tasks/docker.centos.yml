@@ -56,6 +56,15 @@
       - { name: docker-py, version: "{{ pip_version_docker_py }}" }
     when: (centos_version_prerequisite_unsatisfied is not defined) and item.version!="latest"
 
+  - lineinfile: "dest=/etc/default/docker line='export http_proxy=\"{{proxy_url}}\"' state=present"
+    when: proxy == "yes"
+
+  - lineinfile: "dest=/etc/default/docker line='export https_proxy=\"{{proxy_url}}\"' state=present"
+    when: proxy == "yes"
+
+  - lineinfile: "dest=/etc/default/docker line='export no_proxy=\"{{no_proxy}}\"' state=present"
+    when: proxy == "yes"
+
   - name: Start the Docker daemon
     service: name=docker state=started
     when: (centos_version_prequisite_unsatisfied is not defined) and (docker_centos6|changed or docker_centos7|changed)

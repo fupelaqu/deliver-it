@@ -9,4 +9,4 @@ pip_extra_args: "{{__pip_extra_args}}"
 
 proxy: no
 proxy_url: "{{__proxy_url}}"
-proxy_env: "{{__proxy_env}}"
+no_proxy: "{{__no_proxy}}"

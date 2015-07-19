@@ -2,7 +2,6 @@
 
   - name: install docker on RedHat
     yum: name={{item}} state=present
-    environment: proxy_env
     with_items:
       - docker
 
@@ -38,6 +37,15 @@
       - { name: setuptools, version: "{{ pip_version_setuptools }}" }
       - { name: docker-py, version: "{{ pip_version_docker_py }}" }
     when: item.version!="latest"
+
+  - lineinfile: "dest=/etc/default/docker line='export http_proxy=\"{{proxy_url}}\"' state=present"
+    when: proxy == "yes"
+
+  - lineinfile: "dest=/etc/default/docker line='export https_proxy=\"{{proxy_url}}\"' state=present"
+    when: proxy == "yes"
+
+  - lineinfile: "dest=/etc/default/docker line='export no_proxy=\"{{no_proxy}}\"' state=present"
+    when: proxy == "yes"
 
   - name: start docker at boot
     shell: systemctl enable docker

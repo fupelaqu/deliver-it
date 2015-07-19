@@ -79,10 +79,13 @@
       line: "DEFAULT_FORWARD_POLICY=\"ACCEPT\""
     when: ufw_default_exists.stat.exists
 
-  - lineinfile: "dest=/etc/default/docker line='export http_proxy=\"{{__proxy_url}}\"' state=present"
+  - lineinfile: "dest=/etc/default/docker line='export http_proxy=\"{{proxy_url}}\"' state=present"
     when: proxy == "yes"
 
-  - lineinfile: "dest=/etc/default/docker line='export https_proxy=\"{{__proxy_url}}\"' state=present"
+  - lineinfile: "dest=/etc/default/docker line='export https_proxy=\"{{proxy_url}}\"' state=present"
+    when: proxy == "yes"
+
+  - lineinfile: "dest=/etc/default/docker line='export no_proxy=\"{{no_proxy}}\"' state=present"
     when: proxy == "yes"
 
   - name: Start Docker
