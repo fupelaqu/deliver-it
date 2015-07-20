@@ -1,0 +1,24 @@
+---
+
+dependencies:
+  - {role: ansible}
+  - {role: docker}
+  - {role: docker.registry, docker_registry_fqdn: "{{__docker_registry_host}}", docker_registry_ip: "{{__docker_registry_ip}}", users: "{{__users}}", pip_extra_args: "{{__pip_extra_args}}"}
+  - {role: docker.registry.login} #, docker_registry: "{{__docker_registry}}"
+  - {role: docker.artifactory}
+  - {role: docker.sonarqube}
+  - {
+      role: jenkins,
+      plugins: "{{__plugins}}",
+      jenkins_dest: "{{__jenkins_dest}}",
+      jenkins_lib: "{{__jenkins_lib}}",
+      jenkins: "{{__jenkins}}",
+      port: "{{__jenkins_port}}",
+      proxy: "{{__proxy}}",
+      proxy_host: "{{__proxy_host}}",
+      proxy_port: "{{__proxy_port}}",
+      proxy_login: "{{__proxy_login}}",
+      proxy_password: "{{__proxy_password}}",
+  }
+  - {role: docker.jenkins.slave}
+  - {role: docker.fitnesse}

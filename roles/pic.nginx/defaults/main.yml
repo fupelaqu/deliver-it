@@ -1,0 +1,13 @@
+---
+
+vhost: "{{__docker_registry_host}}"
+
+interface: "{{__interface}}"
+
+jenkins_port: "{{__jenkins_port}}"
+artifactory_port: "{{__artifactory_port}}"
+fitnesse_port: "{{__fitnesse_port}}"
+fitnesse_context_root: "{{__fitnesse_context_root}}"
+sonar_port: "{{__sonar_port}}"
+sonar_context: "{{__sonar_context}}"
+

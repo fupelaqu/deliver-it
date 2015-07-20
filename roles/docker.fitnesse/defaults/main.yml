@@ -1,0 +1,12 @@
+---
+
+java_version: "{{__java_version}}"
+
+fitnesse_url: "{{__fitnesse_url}}"
+fitnesse_port: "{{__fitnesse_port}}"
+fitnesse_context_root: "{{__fitnesse_context_root}}"
+
+docker_registry: "{{__docker_registry}}"
+
+interface: "{{__interface}}"
+

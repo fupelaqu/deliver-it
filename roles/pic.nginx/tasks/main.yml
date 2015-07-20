@@ -1,0 +1,14 @@
+---
+
+  - name: Install Nginx
+    apt: >
+      name={{item}}
+      state=installed
+    with_items:
+      - nginx
+
+  - name: ensure nginx daemon is running
+    service: name=nginx state=running
+
+  - include: vhost.yml
+

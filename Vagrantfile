@@ -35,7 +35,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     deliver.vm.provision :ansible do |ansible|
       ansible.inventory_path = "inventory.ini"
       ansible.playbook = "site.yml"
-      ansible.extra_vars = { user:"vagrant", proxy:"yes", proxy_mock:"yes", __proxy_host:"192.168.56.105" }
+      ansible.extra_vars = { user:"vagrant", proxy:"no", proxy_mock:"no", __proxy_host:"192.168.56.104" }
       ansible.sudo = true
       ansible.limit = 'all'
       ansible.verbose = 'vv'

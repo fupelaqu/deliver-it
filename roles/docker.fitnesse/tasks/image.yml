@@ -1,0 +1,23 @@
+---
+
+  - file: path=/tmp/fitnesse state=directory
+
+  - name: stat fitnesse-standalone jar
+    local_action: stat path="fitnesse-standalone.jar"
+    sudo: no
+    register: fitnesse_standalone
+
+  - fail: msg="fitnesse-standalone.jar is missing. Please download it 'curl --insecure -O {{fitnesse_url}}'"
+    when: not fitnesse_standalone.stat.exists
+
+  - copy: src={{item}} dest=/tmp/fitnesse/
+    with_items:
+      - .dockerignore
+      - fitnesse-standalone.jar
+
+  - template: src=Dockerfile dest=/tmp/fitnesse/
+
+  - shell: docker build -t {{docker_registry.host}}/fitnesse:latest /tmp/fitnesse
+
+  - shell: docker push {{docker_registry.host}}/fitnesse:latest
+

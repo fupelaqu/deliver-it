@@ -1,0 +1,13 @@
+---
+
+  - file: path=/opt/fitnesse/FitNesseRoot state=directory owner=jenkins group=jenkins
+
+  - name: check fitnesse docker base image
+    shell: docker inspect {{docker_registry.host}}/fitnesse:latest
+    ignore_errors: yes
+    register: search_fitnesse_response
+
+  - include: image.yml
+    when: search_fitnesse_response|failed
+
+  - include: container.yml

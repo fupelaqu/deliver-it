@@ -1,0 +1,16 @@
+---
+
+  - name: check jenkins slave docker base image
+    shell: docker inspect evarga/jenkins-slave:latest
+    ignore_errors: yes
+    register: search_jenkins_slave_response
+
+  - shell: sudo docker pull evarga/jenkins-slave:latest
+    when: search_jenkins_slave_response|failed
+
+  - lineinfile: dest=/etc/default/docker line='DOCKER_OPTS="-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock"' state=present
+    register: default_docker
+
+  - name: Restart Docker
+    service: name=docker state=restarted
+    when: default_docker|changed

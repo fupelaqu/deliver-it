@@ -8,5 +8,5 @@ pip_version_docker_py: "{{__pip_version_docker_py}}"
 pip_extra_args: "{{__pip_extra_args}}"
 
 proxy: no
-proxy_url: "{{__proxy_url}}"
+proxy_url: "http://{{__proxy_login}}:{{__proxy_password}}@{{__proxy_host}}:{{__proxy_port}}"
 no_proxy: "{{__no_proxy}}"
