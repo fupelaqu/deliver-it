@@ -10,3 +10,7 @@
 	path = roles/jenkins
 	url = https://github.com/fupelaqu/ansible-jenkins.git
 	branch = development
+[submodule "roles/epel"]
+	path = roles/epel
+	url = https://github.com/geerlingguy/ansible-role-repo-epel
+	branch = master
