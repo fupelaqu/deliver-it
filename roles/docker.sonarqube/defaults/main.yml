@@ -1,0 +1,26 @@
+---
+
+java_version: "{{__java_version}}"
+
+docker_registry: "{{__docker_registry}}"
+
+sonar_interface: "{{__interface}}"
+
+sonar_db_dialect: "{{__sonar_db_dialect}}"
+sonar_jdbc_username: "{{__sonar_jdbc_username}}"
+sonar_jdbc_password: "{{__sonar_jdbc_password}}"
+
+sonar_version: "{{__sonar_version}}"
+sonar_archive: "https://github.com/SonarSource/sonarqube/archive/{{sonar_version}}.tar.gz"
+
+sonar_port: "{{__sonar_port}}"
+sonar_context: "{{__sonar_context}}"
+
+proxy_host: "{{__proxy_host}}"
+proxy_port: "{{__proxy_port}}"
+proxy_login: "{{__proxy_login}}"
+proxy_password: "{{__proxy_password}}"
+proxy_url: "{{__proxy_url}}"
+
+# TODO install plugins
+# Java 3.4: https://sonarsource.bintray.com/Distribution/sonar-java-plugin/sonar-java-plugin-3.4.jar

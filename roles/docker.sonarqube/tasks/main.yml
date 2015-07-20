@@ -1,0 +1,34 @@
+---
+
+  - name: search sonarqube image
+    shell: docker inspect {{docker_registry.host}}/sonarqube:{{sonar_version}}
+    ignore_errors: yes
+    register: search_sonarqube_response
+
+  - include: sonarqube-build-container.yml
+    when: search_sonarqube_response|failed
+
+  - file: path=/var/log/sonarqube state=directory
+
+  - file: path=/etc/sonarqube state=directory
+
+  - file: path=/var/lib/sonarqube/data state=directory
+
+  - file: path=/var/lib/sonarqube/extensions/plugins state=directory
+
+  - name: ensure sonarqube container is running
+    docker:
+      image: "{{docker_registry.host}}/sonarqube:{{sonar_version}}"
+      memory_limit: 1024MB
+      name: sonarqube
+      links: "{{db_name}}:{{db_name}}"
+      ports: "{{sonar_interface}}:{{sonar_port}}:9000"
+      state: reloaded
+      restart_policy: always
+      volumes:
+        /var/lib/sonarqube/data:/opt/sonarqube/data:rw
+        /var/lib/sonarqube/temp:/opt/sonarqube/temp:rw
+        /var/lib/sonarqube/extensions/plugins:/opt/sonarqube/extensions/plugins:rw
+        /var/log/sonarqube:/opt/sonarqube/logs:rw
+    register: start_sonarqube
+

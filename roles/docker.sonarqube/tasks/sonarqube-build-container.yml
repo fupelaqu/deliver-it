@@ -1,0 +1,47 @@
+---
+
+  - name: stat sonarqube
+    local_action: stat path="sonarqube-{{sonar_version}}.tar.gz"
+    sudo: no
+    register: sonarqube
+
+  - fail: msg="sonarqube-{{sonar_version}}.tar.gz is missing. Please download it 'curl --insecure -O {{sonar_archive}}'"
+    when: not sonarqube.stat.exists
+
+  - name: stat jdk
+    local_action: stat path="jdk-7u80-linux-x64.gz"
+    sudo: no
+    register: jdk
+
+  - fail: msg="jdk-7u80-linux-x64.gz is missing. Please download it from http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html"
+    when: not jdk.stat.exists
+
+  - name: copy sonarqube docker files
+    copy: src={{item}} dest=/tmp/sonarqube/
+    with_items:
+      - "sonarqube-{{sonar_version}}.tar.gz"
+      - start.sh
+      - jdk-7u80-linux-x64.gz
+
+#  - name: copy aptitude configuration for http proxy
+#    template: src=apt.conf dest=/tmp/sonarqube/apt.conf
+
+#  - name: copy java playbook
+#    template: src=java.yml dest=/tmp/sonarqube/java.yml
+
+  - name: copy sonarqube docker file
+    template: src=Dockerfile dest=/tmp/sonarqube/Dockerfile
+
+  - name: copy sonarqube properties file
+    template: src=sonar.properties dest=/tmp/sonarqube/sonar.properties
+
+  - name: build sonarqube
+    docker_image:
+      path: "/tmp/sonarqube"
+      name: "{{docker_registry.host}}/sonarqube"
+      state: present
+      tag: "{{sonar_version}}"
+    register: build_sonarqube
+
+  - name: push sonarqube
+    shell: docker push {{docker_registry.host}}/sonarqube:{{sonar_version}}
