@@ -1,0 +1,4 @@
+---
+
+dependencies:
+  - {role: docker.registry.client, users: "{{__users}}"}

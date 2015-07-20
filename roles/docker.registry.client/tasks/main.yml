@@ -1,0 +1,24 @@
+---
+
+  - lineinfile: dest=/etc/hosts regexp='^{{ docker_registry_ip | regex_replace('^(.*)\.(.*)\.(.*)\.(.*)', '\\1\.\\2\.\\3\.\\4') }}' line='{{docker_registry_ip}} {{docker_registry_host}}' owner=root group=root mode=0644
+
+  - file: path=~/.ssh/known_hosts state=touch mode=600
+
+  - shell: ssh-keygen -R {{docker_registry_host}} && ssh-keygen -R {{docker_registry_ip}} && ssh-keyscan -H {{docker_registry_host}} >> ~/.ssh/known_hosts && ssh-keyscan -H {{docker_registry_ip}} >> ~/.ssh/known_hosts
+
+  - file: path=/etc/docker/certs.d/{{docker_registry_host}} state=directory
+
+  - shell: openssl s_client -connect {{docker_registry_host}}:443 </dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /etc/docker/certs.d/{{docker_registry_host}}/ca.crt
+
+#  - file: path=/usr/local/share/ca-certificates/docker-ct state=directory
+
+  - shell: openssl s_client -connect {{docker_registry_host}}:443 </dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /usr/local/share/ca-certificates/docker-ct.crt
+
+  - shell: update-ca-certificates
+
+  - service: name=docker state=restarted
+
+  - name: test login to private docker registry
+    shell: docker login --username={{item.name}} --password={{item.password}} --email={{item.email}} {{docker_registry_host}}/ && docker logout
+    with_items: users
+    register: test_docker_registry_login

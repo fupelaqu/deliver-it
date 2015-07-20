@@ -1,0 +1,5 @@
+---
+
+docker_registry_host: "{{__docker_registry_host}}"
+docker_registry_ip: "{{__docker_registry_ip}}"
+users: "{{__users}}"
