@@ -1,5 +1,4 @@
 .idea
-old
-.vagrant
 *.iml
-tmp
+.vagrant
+ssl
