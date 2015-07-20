@@ -1,6 +1,6 @@
 ---
 
-vhost: "{{__docker_registry_host}}"
+vhost: "{{__master_fqdn}}"
 
 interface: "{{__interface}}"
 

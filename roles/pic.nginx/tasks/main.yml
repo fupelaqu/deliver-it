@@ -1,11 +1,16 @@
 ---
 
   - name: Install Nginx
-    apt: >
-      name={{item}}
-      state=installed
-    with_items:
-      - nginx
+    apt:
+      name: nginx
+      state: installed
+    when: ansible_os_family == "Debian"
+
+  - name: Install Nginx
+    yum:
+      name: nginx
+      state: installed
+    when: ansible_os_family == "Redhat"
 
   - name: ensure nginx daemon is running
     service: name=nginx state=running
