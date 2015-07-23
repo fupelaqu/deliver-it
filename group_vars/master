@@ -33,14 +33,20 @@ __jenkins:
   deb:
     repo: 'deb http://pkg.jenkins-ci.org/debian binary/' # Jenkins repository
     dependencies: # Jenkins dependencies
-    - 'openjdk-7-jre'
-    - 'openjdk-7-jdk'
-    - 'git'
-    - 'subversion'
-    - 'curl'
+      - 'openjdk-7-jre'
+      - 'openjdk-7-jdk'
+      - 'git'
+      - 'subversion'
+      - 'curl'
+  redhat:
+    dependencies:
+      - 'java'
+      - 'git'
+      - 'subversion'
+      - 'curl'
   cli_dest: '{{ jenkins_dest }}/jenkins-cli.jar' # Jenkins CLI destination
   updates_dest: '{{ jenkins_dest }}/updates_jenkins.json' # Jenkins updates file
-__port: 8080
+__jenkins_port: 8080
 
 __sonar_db_dialect: postgresql
 __sonar_ambassador: no
