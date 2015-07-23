@@ -47,8 +47,8 @@
   - lineinfile: "dest=/etc/sysconfig/docker line='export no_proxy=\"{{no_proxy}}\"' state=present"
     when: proxy == "yes"
 
-  - name: start docker at boot
-    shell: systemctl enable docker
+  - name: Enable Docker service on boot
+    service: name=docker enabled=yes
 
-  - name: start docker
-    shell: systemctl start docker
+  - name: Start the Docker daemon
+    service: name=docker state=started
