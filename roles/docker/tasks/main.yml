@@ -1,12 +1,12 @@
 ---
 
   - include: docker.redhat.yml
-    when: ansible_os_family == "RedHat" and (not ansible_distribution == 'CentOS')
+    when: ansible_os_family == "RedHat" #and (not ansible_distribution == 'CentOS')
 
   - include: docker.ubuntu.yml
     when: ansible_distribution == 'Ubuntu'
 
-  - include: docker.centos.yml
-    when: ansible_distribution == 'CentOS'
+#  - include: docker.centos.yml
+#    when: ansible_distribution == 'CentOS'
 
   - copy: src=minify_docker_image.sh dest=/usr/local/bin/minify_docker_image owner=root group=root mode=0755

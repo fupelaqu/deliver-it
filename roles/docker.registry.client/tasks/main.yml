@@ -12,9 +12,17 @@
 
 #  - file: path=/usr/local/share/ca-certificates/docker-ct state=directory
 
-  - shell: openssl s_client -connect {{docker_registry_host}}:443 </dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /usr/local/share/ca-certificates/docker-ct.crt
+  - shell: openssl s_client -connect {{docker_registry_host}}:443 </dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /usr/local/share/ca-certificates/{{docker_registry_host}}.crt
+    when: ansible_os_family == "Debian"
 
   - shell: update-ca-certificates
+    when: ansible_os_family == "Debian"
+
+  - shell: openssl s_client -connect {{docker_registry_host}}:443 </dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /etc/pki/ca-trust/source/anchors/{{docker_registry_host}}.crt
+    when: ansible_os_family == "RedHat"
+
+  - shell: update-ca-trust
+    when: ansible_os_family == "RedHat"
 
   - service: name=docker state=restarted
 
