@@ -1,0 +1,9 @@
+---
+
+home: "{{__artifactory_home}}"
+data: "{{__artifactory_data}}"
+logs: "{{__artifactory_logs}}"
+backup: "{{__artifactory_backup}}"
+etc: "{{__artifactory_etc}}"
+interface: "{{__artifactory_interface}}"
+artifactory_port: "{{__artifactory_port}}"

@@ -1,17 +1,35 @@
 ---
 
+  - include: selinux.yml
+
   - name: add group artifactory
     group: name=artifactory gid=498 state=present
 
   - file: path={{home}} state=directory
 
+  - shell: chcon -Rt svirt_sandbox_file_t {{home}}
+    when: selinux_status is defined
+
   - name: add user artifactory
     user: name=artifactory group=artifactory home={{home}} shell=/bin/bash uid=500 state=present
 
   - file: path={{data}} owner=artifactory group=artifactory state=directory
+
+  - shell: chcon -Rt svirt_sandbox_file_t {{data}}
+    when: selinux_status is defined
+
   - file: path={{logs}} owner=artifactory group=artifactory state=directory
+
+  - shell: chcon -Rt svirt_sandbox_file_t {{logs}}
+    when: selinux_status is defined
+
   - file: path={{logs}}/catalina owner=artifactory group=artifactory state=directory
+
   - file: path={{backup}} owner=artifactory group=artifactory state=directory
+
+  - shell: chcon -Rt svirt_sandbox_file_t {{backup}}
+    when: selinux_status is defined
+
 #  - file: path={{etc}} owner=artifactory state=directory
 
   - name: ensure artifactory container is running

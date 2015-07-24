@@ -8,8 +8,19 @@
   - shell: sudo docker pull evarga/jenkins-slave:latest
     when: search_jenkins_slave_response|failed
 
+  - file: path=/etc/default state=directory
+    when: ansible_os_family == "Debian"
+
   - lineinfile: dest=/etc/default/docker line='DOCKER_OPTS="-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock"' state=present
     register: default_docker
+    when: ansible_os_family == "Debian"
+
+  - file: path=/etc/sysconfig state=directory
+    when: ansible_os_family == "RedHat"
+
+  - lineinfile: dest=/etc/sysconfig/docker line='DOCKER_OPTS="-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock"' state=present
+    register: default_docker
+    when: ansible_os_family == "RedHat"
 
   - name: Restart Docker
     service: name=docker state=restarted

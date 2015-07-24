@@ -2,6 +2,8 @@
 
   - lineinfile: dest=/etc/hosts regexp='^{{ docker_registry_ip | regex_replace('^(.*)\.(.*)\.(.*)\.(.*)', '\\1\.\\2\.\\3\.\\4') }}' line='{{docker_registry_ip}} {{docker_registry_host}}' owner=root group=root mode=0644
 
+  - file: path=~/.ssh state=directory
+
   - file: path=~/.ssh/known_hosts state=touch mode=600
 
   - shell: ssh-keygen -R {{docker_registry_host}} && ssh-keygen -R {{docker_registry_ip}} && ssh-keyscan -H {{docker_registry_host}} >> ~/.ssh/known_hosts && ssh-keyscan -H {{docker_registry_ip}} >> ~/.ssh/known_hosts

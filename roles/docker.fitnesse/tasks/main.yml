@@ -1,6 +1,11 @@
 ---
 
+  - include: selinux.yml
+
   - file: path=/opt/fitnesse/FitNesseRoot state=directory owner=jenkins group=jenkins
+
+  - shell: chcon -Rt svirt_sandbox_file_t /opt/fitnesse/FitNesseRoot
+    when: selinux_status is defined
 
   - name: check fitnesse docker base image
     shell: docker inspect {{docker_registry.host}}/fitnesse:latest

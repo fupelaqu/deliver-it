@@ -1,6 +1,7 @@
 ---
 
-__plugins:
+# jenkins
+__jenkins_plugins:
   - ldap
   - jira
   - subversion #for previous developments
@@ -48,6 +49,11 @@ __jenkins:
   updates_dest: '{{ jenkins_dest }}/updates_jenkins.json' # Jenkins updates file
 __jenkins_port: 8080
 
+#artifactory
+__artifactory: "yes"
+
+#sonarqube
+__sonarqube: "yes"
 __sonar_db_dialect: postgresql
 __sonar_ambassador: no
 __sonar_jdbc_username: sonar
@@ -55,3 +61,9 @@ __sonar_jdbc_password: sonar
 __sonar_version: "5.1.1"
 __sonar_port: 9000
 __sonar_context: /sonar
+
+#fitnesse
+__fitnesse: "yes"
+
+#ansible
+__ansible: "yes"

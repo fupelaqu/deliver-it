@@ -1,6 +1,6 @@
 ---
 
-  - name: Create a VirtualHost file
+  - name: Create a VirtualHost file for Debian
     template:
       src=vhosts.conf
       dest=/etc/nginx/sites-available/{{ vhost }}
@@ -9,8 +9,23 @@
       mode=0644
     notify:
       - restart nginx
+    when: ansible_os_family == "Debian"
 
   - file: src=/etc/nginx/sites-available/{{ vhost }} dest=/etc/nginx/sites-enabled/{{ vhost }} owner=root group=root state=link
     notify:
       - restart nginx
+    when: ansible_os_family == "Debian"
 
+  - name: Create a VirtualHost file for RedHat
+    template:
+      src=vhosts.conf
+      dest=/etc/nginx/conf.d/{{ vhost }}.conf
+      owner=root
+      group=root
+      mode=0644
+    notify:
+      - restart nginx
+    when: ansible_os_family == "RedHat"
+
+  - selinux: state=disabled #policy=targeted
+    when: ansible_os_family == "RedHat"

@@ -5,7 +5,7 @@ RUN mkdir -p /opt/fitnesse/FitNesseRoot
 WORKDIR /opt/fitnesse
 
 #RUN curl --insecure -O {{fitnesse_url}}
-COPY fitnesse-standalone.jar /opt/finesse/
+COPY fitnesse-standalone.jar /opt/fitnesse/
 
 VOLUME /opt/fitnesse/FitNesseRoot
 
