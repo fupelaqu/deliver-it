@@ -4,7 +4,7 @@
 	branch = master
 [submodule "roles/docker.db"]
 	path = roles/docker.db
-	url = https://github.com/fupelaqu/ansible-docker-db
+	url = https://github.com/fupelaqu/ansible-docker-db.git
 	branch = master
 [submodule "roles/jenkins"]
 	path = roles/jenkins
