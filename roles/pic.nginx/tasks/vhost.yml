@@ -27,5 +27,5 @@
       - restart nginx
     when: ansible_os_family == "RedHat"
 
-  - selinux: state=disabled #policy=targeted
-    when: ansible_os_family == "RedHat"
+#  - selinux: state=disabled #policy=targeted
+#    when: ansible_os_family == "RedHat"

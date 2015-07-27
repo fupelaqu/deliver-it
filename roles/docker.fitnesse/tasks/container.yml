@@ -1,16 +1,15 @@
 ---
 
+  - include: selinux.yml
+
+  - file: path=/opt/fitnesse/FitNesseRoot state=directory owner=jenkins group=jenkins
+
+  - shell: chcon -Rt svirt_sandbox_file_t /opt/fitnesse/FitNesseRoot
+    when: selinux_status.rc != 0
+
   - name: ensure fitnesse container is running
     docker:
-#begin registry auth
-      insecure_registry: yes
-      use_tls: "no"
-      registry: "{{docker_registry.host}}/"
-      username: "{{docker_registry.username}}"
-      password: "{{docker_registry.password}}"
-      email: "{{docker_registry.email}}"
-#end registry auth
-      image: "{{docker_registry.host}}/fitnesse:latest"
+      image: "fitnesse:latest"
       memory_limit: 1024MB
       name: "fitnesse"
       pull: missing

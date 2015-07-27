@@ -17,7 +17,11 @@
 
   - template: src=Dockerfile dest=/tmp/fitnesse/
 
-  - shell: docker build -t {{docker_registry.host}}/fitnesse:latest /tmp/fitnesse
-
-  - shell: docker push {{docker_registry.host}}/fitnesse:latest
+  - name: build fitnesse
+    docker_image:
+      path: "/tmp/fitnesse"
+      name: "fitnesse"
+      state: present
+      tag: "latest"
+    register: build_fitnesse
 

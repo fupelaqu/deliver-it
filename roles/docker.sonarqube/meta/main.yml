@@ -1,4 +1,5 @@
 ---
 
 dependencies:
+  - {role: docker}
   - {role: docker.db, db_dialect: "{{sonar_db_dialect}}", db_username: "{{sonar_jdbc_username}}", db_password: "{{sonar_jdbc_password}}", db_ambassador: "no"}

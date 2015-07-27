@@ -38,10 +38,7 @@
   - name: build sonarqube
     docker_image:
       path: "/tmp/sonarqube"
-      name: "{{docker_registry.host}}/sonarqube"
+      name: "sonarqube"
       state: present
       tag: "{{sonar_version}}"
     register: build_sonarqube
-
-  - name: push sonarqube
-    shell: docker push {{docker_registry.host}}/sonarqube:{{sonar_version}}

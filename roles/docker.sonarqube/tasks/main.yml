@@ -3,7 +3,7 @@
   - include: selinux.yml
 
   - name: search sonarqube image
-    shell: docker inspect {{docker_registry.host}}/sonarqube:{{sonar_version}}
+    shell: docker inspect sonarqube:{{sonar_version}}
     ignore_errors: yes
     register: search_sonarqube_response
 
@@ -13,28 +13,28 @@
   - file: path=/var/log/sonarqube state=directory
 
   - shell: chcon -Rt svirt_sandbox_file_t /var/log/sonarqube
-    when: selinux_status is defined
+    when: selinux_status.rc != 0
 
   - file: path=/etc/sonarqube state=directory
 
   - file: path=/var/lib/sonarqube/temp state=directory
 
   - shell: chcon -Rt svirt_sandbox_file_t /var/lib/sonarqube/temp
-    when: selinux_status is defined
+    when: selinux_status.rc != 0
 
   - file: path=/var/lib/sonarqube/data state=directory
 
   - shell: chcon -Rt svirt_sandbox_file_t /var/lib/sonarqube/data
-    when: selinux_status is defined
+    when: selinux_status.rc != 0
 
   - file: path=/var/lib/sonarqube/extensions/plugins state=directory
 
   - shell: chcon -Rt svirt_sandbox_file_t /var/lib/sonarqube/extensions/plugins
-    when: selinux_status is defined
+    when: selinux_status.rc != 0
 
   - name: ensure sonarqube container is running
     docker:
-      image: "{{docker_registry.host}}/sonarqube:{{sonar_version}}"
+      image: "sonarqube:{{sonar_version}}"
       memory_limit: 1024MB
       name: sonarqube
       links: "{{db_name}}:{{db_name}}"
