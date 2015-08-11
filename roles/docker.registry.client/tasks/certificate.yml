@@ -1,0 +1,33 @@
+---
+
+  - file: path=~/.ssh state=directory
+
+  - file: path=~/.ssh/known_hosts state=touch mode=600
+
+  - shell: ssh-keygen -R {{docker_registry_host}} && ssh-keygen -R {{docker_registry_ip}} && ssh-keyscan -H {{docker_registry_host}} >> ~/.ssh/known_hosts && ssh-keyscan -H {{docker_registry_ip}} >> ~/.ssh/known_hosts
+
+  - file: path=/etc/docker/certs.d/{{docker_registry_host}}:{{docker_registry_port}} state=directory
+
+  - stat: path=/etc/docker/certs.d/{{docker_registry_host}}:{{docker_registry_port}}/ca.crt
+    register: docker_registry_ca
+
+  - shell: openssl s_client -connect {{docker_registry_host}}:{{docker_registry_port}} </dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /etc/docker/certs.d/{{docker_registry_host}}:{{docker_registry_port}}/ca.crt
+    when: not docker_registry_ca.stat.exists
+
+#  - file: path=/usr/local/share/ca-certificates/docker-ct state=directory
+
+  - shell: openssl s_client -connect {{docker_registry_host}}:{{docker_registry_port}} </dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /usr/local/share/ca-certificates/{{docker_registry_host}}.crt
+    when: ansible_os_family == "Debian"
+
+  - shell: update-ca-certificates
+    when: ansible_os_family == "Debian"
+
+  - shell: openssl s_client -connect {{docker_registry_host}}:{{docker_registry_port}} </dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /etc/pki/ca-trust/source/anchors/{{docker_registry_host}}.crt
+    when: ansible_os_family == "RedHat"
+
+  - shell: update-ca-trust
+    when: ansible_os_family == "RedHat"
+
+  - service: name=docker state=restarted
+    when: not docker_registry_ca.stat.exists
+
