@@ -6,13 +6,24 @@
     when: ansible_distribution_version|version_compare(14.04, '<')
 
   - name: check if docker has already been installed
-    shell: dpkg-query -W -f='${Status}' lxc-docker 2>/dev/null | grep -c "ok installed"
+    shell: dpkg-query -W -f='${Status}' docker-engine 2>/dev/null | grep -c "ok installed"
     ignore_errors: true
     register: docker_installed
 
+  - name: remove older repositories
+    apt_repository: repo='{{item}}' state=absent
+    with_items:
+      - deb https://apt.dockerproject.org/repo ubuntu-trusty main
+      - deb https://get.docker.io/ubuntu docker main
+    when: not docker_installed or (docker_installed|failed)
+
+  - name: add docker repository
+    apt_repository: repo='deb https://get.docker.com/ubuntu docker main' state=present
+    when: not docker_installed or (docker_installed|failed)
+
   - name: install docker
     shell: wget -qO- https://get.docker.com/ | sh #https://github.com/docker/docker/issues/4036
-    when: not docker_installed or (docker_installed|failed)
+    when: not docker_installed or (docker_installed|failed) or upgrade_docker|bool
 
   - name: Install easy_install, python-dev package with apt
     apt:
@@ -80,13 +91,13 @@
     when: ufw_default_exists.stat.exists
 
   - lineinfile: "dest=/etc/default/docker line='export http_proxy=\"{{proxy_url}}\"' state=present"
-    when: proxy == "yes"
+    when: proxy|bool
 
   - lineinfile: "dest=/etc/default/docker line='export https_proxy=\"{{proxy_url}}\"' state=present"
-    when: proxy == "yes"
+    when: proxy|bool
 
   - lineinfile: "dest=/etc/default/docker line='export no_proxy=\"{{no_proxy}}\"' state=present"
-    when: proxy == "yes"
+    when: proxy|bool
 
   - name: Start Docker
     service: name=docker state=started

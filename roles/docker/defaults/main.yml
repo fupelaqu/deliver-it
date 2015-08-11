@@ -10,3 +10,5 @@ pip_extra_args: "{{__pip_extra_args}}"
 proxy: no
 proxy_url: "http://{{__proxy_login}}:{{__proxy_password}}@{{__proxy_host}}:{{__proxy_port}}"
 no_proxy: "{{__no_proxy}}"
+
+upgrade_docker: "{{__upgrade_docker}}"

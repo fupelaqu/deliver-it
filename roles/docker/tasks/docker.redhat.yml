@@ -40,13 +40,13 @@
 #    when: item.version!="latest"
 
   - lineinfile: "dest=/etc/sysconfig/docker line='export http_proxy=\"{{proxy_url}}\"' state=present"
-    when: proxy == "yes"
+    when: proxy|bool
 
   - lineinfile: "dest=/etc/sysconfig/docker line='export https_proxy=\"{{proxy_url}}\"' state=present"
-    when: proxy == "yes"
+    when: proxy|bool
 
   - lineinfile: "dest=/etc/sysconfig/docker line='export no_proxy=\"{{no_proxy}}\"' state=present"
-    when: proxy == "yes"
+    when: proxy|bool
 
   - name: Enable Docker service on boot
     service: name=docker enabled=yes
