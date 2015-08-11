@@ -1,12 +1,12 @@
 ---
 
 dependencies:
-  - {role: ansible, when: __ansible == "yes"}
+  - {role: ansible, when: __ansible|bool}
   - {role: docker}
   - {role: docker.registry, docker_registry_fqdn: "{{__docker_registry_host}}", docker_registry_ip: "{{__docker_registry_ip}}", users: "{{__users}}", pip_extra_args: "{{__pip_extra_args}}"}
   - {role: docker.registry.login} #, docker_registry: "{{__docker_registry}}"
-  - {role: docker.artifactory, when: __artifactory == "yes"}
-  - {role: docker.sonarqube, when: __sonarqube == "yes"}
+  - {role: docker.artifactory, when: __artifactory|bool}
+  - {role: docker.sonarqube, when: __sonarqube|bool}
   - {
       role: jenkins,
       plugins: "{{__jenkins_plugins}}",
@@ -21,4 +21,4 @@ dependencies:
       proxy_password: "{{__proxy_password}}",
   }
   - {role: docker.jenkins.slave}
-  - {role: docker.fitnesse, when: __fitnesse == "yes"}
+  - {role: docker.fitnesse, when: __fitnesse|bool}

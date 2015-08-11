@@ -5,10 +5,10 @@
       - software-properties-common
 
   - copy: src=93C4A3FD7BB9C367 dest=/tmp/93C4A3FD7BB9C367
-    when: proxy == "yes"
+    when: proxy|bool
 
   - apt_key: data="{{ lookup('file', '93C4A3FD7BB9C367') }}" state=present
-    when: proxy == "yes"
+    when: proxy|bool
 
   - apt_repository: repo=ppa:ansible/ansible update_cache=yes state=present
 

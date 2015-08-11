@@ -12,7 +12,6 @@
       image: "fitnesse:latest"
       memory_limit: 1024MB
       name: "fitnesse"
-      pull: missing
       ports:
         - "{{interface}}:{{fitnesse_port}}:80"
       volumes:
@@ -20,4 +19,5 @@
       state: reloaded
       pull: missing
       restart_policy: always
+      privileged: yes
     register: start_fitnesse

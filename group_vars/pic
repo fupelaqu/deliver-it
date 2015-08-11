@@ -6,6 +6,8 @@ __master_host: "{{groups['master'][0]}}"
 __master_fqdn: "{{hostvars[__master_host]['ansible_fqdn']}}"
 __master_ip: "{{hostvars[__master_host]['ansible_eth1']['ipv4']['address']}}"
 
+__docker_registry_with_ssl: yes
+__docker_registry_port: 443
 __docker_registry_host: "{{__master_fqdn}}"
 __docker_registry_ip: "{{__master_ip}}"
 __docker_registry_username: docker
@@ -14,6 +16,7 @@ __docker_registry_email: stephane.manciot@gmail.com
 
 __docker_registry: {
   host: "{{__docker_registry_host}}",
+  port: "{{__docker_registry_port}}",
   username: "{{__docker_registry_username}}",
   password: "{{__docker_registry_password}}",
   email: "{{__docker_registry_email}}"
@@ -23,17 +26,6 @@ __users:
   - name: "{{__docker_registry.username}}"
     password: "{{__docker_registry.password}}"
     email: "{{__docker_registry.email}}"
-
-__pip_version_docker_py: "1.1"
-
-__jenkins_port: "8080"
-__artifactory_port: "8081"
-__fitnesse_port: "8082"
-
-__fitnesse_url: "https://cleancoder.ci.cloudbees.com/job/fitnesse/lastStableBuild/artifact/dist/fitnesse-standalone.jar"
-__fitnesse_context_root: "/fitnesse"
-
-__java_version: 7
 
 __proxy: no
 
@@ -55,3 +47,5 @@ __proxy_env:
 __pip_version_six: "1.4"
 __pip_version_docker_py: "1.1.0"
 __pip_extra_args: "--proxy {{__proxy_url}}"
+
+__upgrade_docker: no

@@ -50,10 +50,11 @@ __jenkins:
 __jenkins_port: 8080
 
 #artifactory
-__artifactory: "yes"
+__artifactory: yes
+__artifactory_port: 8081
 
 #sonarqube
-__sonarqube: "yes"
+__sonarqube: yes
 __sonar_db_dialect: postgresql
 __sonar_ambassador: no
 __sonar_jdbc_username: sonar
@@ -63,7 +64,13 @@ __sonar_port: 9000
 __sonar_context: /sonar
 
 #fitnesse
-__fitnesse: "yes"
+__fitnesse: yes
+__fitnesse_port: 8082
+__fitnesse_url: "https://cleancoder.ci.cloudbees.com/job/fitnesse/lastStableBuild/artifact/dist/fitnesse-standalone.jar"
+__fitnesse_context_root: "/fitnesse"
 
 #ansible
-__ansible: "yes"
+__ansible: yes
+
+__java_version: 7
+

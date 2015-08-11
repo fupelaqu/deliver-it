@@ -3,4 +3,4 @@
 #  - debug: "msg={{proxy_url}}"
 
   - include: proxy.yml
-    when: proxy == "yes"
+    when: proxy|bool

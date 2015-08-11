@@ -46,5 +46,6 @@
         /var/lib/sonarqube/temp:/opt/sonarqube/temp:rw
         /var/lib/sonarqube/extensions/plugins:/opt/sonarqube/extensions/plugins:rw
         /var/log/sonarqube:/opt/sonarqube/logs:rw
+      privileged: yes
     register: start_sonarqube
 
