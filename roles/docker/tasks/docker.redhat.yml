@@ -23,6 +23,7 @@
     with_items:
       - { name: pip, version: "{{ pip_version_pip }}" }
       - { name: setuptools, version: "{{ pip_version_setuptools }}" }
+      - { name: six, version: "{{ pip_version_six }}" }
       - { name: docker-py, version: "{{ pip_version_docker_py }}" }
     when: item.version=="latest"
 
@@ -36,6 +37,7 @@
     with_items:
       - { name: pip, version: "{{ pip_version_pip }}" }
       - { name: setuptools, version: "{{ pip_version_setuptools }}" }
+      - { name: six, version: "{{ pip_version_six }}" }
       - { name: docker-py, version: "{{ pip_version_docker_py }}" }
     when: item.version!="latest"
 
