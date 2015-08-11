@@ -11,14 +11,14 @@
   - file: path=/etc/default state=directory
     when: ansible_os_family == "Debian"
 
-  - lineinfile: dest=/etc/default/docker line='DOCKER_OPTS="-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock"' state=present
+  - lineinfile: dest=/etc/default/docker regexp='^DOCKER_OPTS=' line='DOCKER_OPTS="-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock"' state=present
     register: default_docker
     when: ansible_os_family == "Debian"
 
   - file: path=/etc/sysconfig state=directory
     when: ansible_os_family == "RedHat"
 
-  - lineinfile: dest=/etc/sysconfig/docker line='DOCKER_OPTS="-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock"' state=present
+  - lineinfile: dest=/etc/sysconfig/docker regexp='^DOCKER_OPTS=' line='DOCKER_OPTS="-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock"' state=present
     register: default_docker
     when: ansible_os_family == "RedHat"
 

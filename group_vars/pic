@@ -15,8 +15,10 @@ __docker_registry_password: changeit
 __docker_registry_email: stephane.manciot@gmail.com
 
 __docker_registry: {
+  ssl: "{{__docker_registry_with_ssl}}",
   host: "{{__docker_registry_host}}",
   port: "{{__docker_registry_port}}",
+  ip: "{{__docker_registry_ip}}",
   username: "{{__docker_registry_username}}",
   password: "{{__docker_registry_password}}",
   email: "{{__docker_registry_email}}"
@@ -34,8 +36,8 @@ __proxy_port: 3128
 __proxy_login: proxy
 __proxy_password: changeit
 
-__proxy_server: "http://{{__master_host}}:{{__proxy_port}}"
-__proxy_url: "http://{{__proxy_login}}:{{__proxy_password}}@{{__master_host}}:{{__proxy_port}}"
+__proxy_server: "http://{{__proxy_host}}:{{__proxy_port}}"
+__proxy_url: "http://{{__proxy_login}}:{{__proxy_password}}@{{__proxy_host}}:{{__proxy_port}}"
 
 __no_proxy: "localhost,127.0.0.1,{{__master_fqdn}},{{__master_ip}}"
 

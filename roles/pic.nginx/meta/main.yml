@@ -3,7 +3,7 @@
 dependencies:
   - {role: ansible, when: __ansible|bool}
   - {role: docker}
-  - {role: docker.registry, docker_registry_fqdn: "{{__docker_registry_host}}", docker_registry_ip: "{{__docker_registry_ip}}", users: "{{__users}}", pip_extra_args: "{{__pip_extra_args}}", docker_registry_with_ssl: "{{__docker_registry_with_ssl}}", docker_registry_port: "{{__docker_registry_port}}", users: "{{__users}}"}
+  - {role: docker.registry, docker_registry_host: "{{__docker_registry_host}}", docker_registry_ip: "{{__docker_registry_ip}}", users: "{{__users}}", pip_extra_args: "{{__pip_extra_args}}", docker_registry_with_ssl: "{{__docker_registry_with_ssl}}", docker_registry_port: "{{__docker_registry_port}}"}
   - {role: docker.registry.login} #, docker_registry: "{{__docker_registry}}"
   - {role: docker.artifactory, when: __artifactory|bool}
   - {role: docker.sonarqube, when: __sonarqube|bool}
